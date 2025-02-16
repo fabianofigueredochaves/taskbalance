@@ -9,3 +9,7 @@ Taskbalance é um aplicativo para o cadastro de tarefas e subtarefas (t/s), a de
 
 - Graficos:
 https://github.com/entronad/flutter_echarts
+
+
+- Sequencia:
+1) Cadastro de tarefas

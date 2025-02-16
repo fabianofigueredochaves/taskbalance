@@ -15,7 +15,7 @@ CRUD
 
 */
 
-//import 'package:a3_udwmj/controller/api_sdm.dart';
+//import 'package:taskbalance/controller/api_sdm.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart'
@@ -27,7 +27,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart'
 
 class db_sqlite {
   Future<Database> openMyDatabase() async {
-    return await openDatabase(join(await getDatabasesPath(), 'taskify.db'),
+    return await openDatabase(join(await getDatabasesPath(), 'taskbalance.db'),
         version: 1, onCreate: (db, version) async {
       //return db.execute('''
       db.execute('''
@@ -38,7 +38,7 @@ class db_sqlite {
               nome TEXT NOT NULL,
               email TEXT NOT NULL,
               senha TEXT NOT NULL,
-              hash TEXT
+              data TEXT
             );
             CREATE TABLE IF NOT EXISTS tarefa (
               id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,14 +46,18 @@ class db_sqlite {
               apiId TEXT,
               titulo TEXT NOT NULL,
               descricao TEXT,
-              data_inicial TEXT,
-              data_final TEXT,
-              time TEXT,
-              categoria TEXT,
-              status TEXT,
+              tempoTotalExec INTEGER,
               hash TEXT,
               FOREIGN KEY (usuarioId) REFERENCES usuario (id) ON DELETE CASCADE
-           ); 
+           );
+           CREATE TABLE IF NOT EXISTS tempo (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              tarefaId INTEGER,
+              apiId TEXT,              
+              tempoExec INTEGER,
+              hash TEXT,
+              FOREIGN KEY (tarefaId) REFERENCES tarefa (id) ON DELETE CASCADE
+           );  
            CREATE TABLE IF NOT EXISTS metadata (              
               name TEXT,
               ult_modif TEXT,
@@ -62,7 +66,8 @@ class db_sqlite {
            '''); 
            db.insert('metadata', {'name': 'bd', 'ult_modif': '', 'hash_md5': ''});
            db.insert('metadata', {'name': 'usuario', 'ult_modif': '', 'hash_md5': ''});
-           db.insert('metadata', {'name': 'tarefa', 'ult_modif': '', 'hash_md5': ''});                     
+           db.insert('metadata', {'name': 'tarefa', 'ult_modif': '', 'hash_md5': ''});
+           db.insert('metadata', {'name': 'tempo', 'ult_modif': '', 'hash_md5': ''});                     
     });
   }
 
